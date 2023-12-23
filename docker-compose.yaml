@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: todo-app
+    build:
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    networks:
+      - todo-app
+    depends_on:
+      - postgres
+  postgres:
+    container_name: todo-app-postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - todo-app
+networks:
+  todo-app:
+    driver: bridge
+volumes:
+  db:
+    driver: local
