@@ -5,6 +5,7 @@ import { TodoModule } from './todo/todo.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as process from 'process';
+import { Todo } from './todo/entity/todo.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import * as process from 'process';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [],
+      entities: [Todo],
       synchronize: true,
     }),
   ],

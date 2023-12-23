@@ -1,52 +1,41 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { TodoDto } from './dto/todo.dto';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+import { TodoService } from './service/todo.service';
 
 @Controller('todo')
 export class TodoController {
+  constructor(private todoService: TodoService) {
+  }
+
   @Get()
-  fetchTodos(): Array<TodoDto> {
-    return [
-      {
-        id: 1,
-        name: 'Todo1',
-        completed: false,
-      },
-      {
-        id: 2,
-        name: 'Todo2',
-        completed: false,
-      },
-      {
-        id: 3,
-        name: 'Todo3',
-        completed: false,
-      },
-    ];
+  async fetchTodos() {
+    return await this.todoService.fetchAll()
   }
 
   @Get(':id')
-  fetchTodo(@Param() params: any): TodoDto {
-    return {
-      id: Number(params.id),
-      name: 'Todo' + Number(params.id),
-      completed: false
-    }
+  async fetchTodo(@Param() params: any) {
+    return await this.todoService.fetchOne(params.id)
   }
 
   @Post()
-  createTodo(@Body() createTodoDto: CreateTodoDto) {
+  async createTodo(@Body() createTodoDto: CreateTodoDto) {
+    await this.todoService.create(createTodoDto)
+
     return createTodoDto
   }
 
-  @Put()
-  updateTodo(@Body() updateTodoDto: UpdateTodoDto) {
+  @Put(':id')
+  async updateTodo(@Body() updateTodoDto: UpdateTodoDto, @Param() params: any) {
+    await this.todoService.update(params.id, updateTodoDto)
+
     return updateTodoDto
   }
 
   @Delete(':id')
-  deleteTodo(@Param() params: any): object {
+  async deleteTodo(@Param() params: any) {
+    await this.todoService.deleteOne(params.id)
+
     return {
       deleted: params.id
     }
