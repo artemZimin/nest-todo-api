@@ -26,7 +26,7 @@ export class TodoRepository {
   }
 
   async fetchAll() {
-    return this.repository.createQueryBuilder('t')
+    return this.repository.createQueryBuilder('wt')
       .addOrderBy('t.id', 'DESC')
       .getMany()
   }
